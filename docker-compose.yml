@@ -1,0 +1,23 @@
+services:
+  users-dbservice:
+    build: ./db-scripts
+    ports:
+      - 1433:1433
+    hostname: users-dbservice
+    networks:
+      - kobank-network
+
+  users-microservice:
+    image: kayfield/kobank-app-users:v1.0
+    environment:
+      - SQLSERVER_HOST=users-dbservice
+      - MSSQL_SA_PASSWORD=P4ssW0rd!
+      - SQLSERVER_PASSWORD=P4ssW0rd!
+    ports:
+      - 8080:8080
+    networks:
+      - kobank-network
+
+networks:
+  kobank-network:
+    driver: bridge
